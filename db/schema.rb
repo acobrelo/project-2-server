@@ -11,10 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160327214720) do
+ActiveRecord::Schema.define(version: 20160624182351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "assessments", force: :cascade do |t|
+    t.string   "purpose"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "battery"
+  end
+
+  create_table "entries", force: :cascade do |t|
+    t.date     "date"
+    t.boolean  "meds_taken"
+    t.string   "comments"
+    t.integer  "profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "entries", ["profile_id"], name: "index_entries_on_profile_id", using: :btree
 
   create_table "examples", force: :cascade do |t|
     t.text     "text",       null: false
@@ -24,6 +42,39 @@ ActiveRecord::Schema.define(version: 20160327214720) do
   end
 
   add_index "examples", ["user_id"], name: "index_examples_on_user_id", using: :btree
+
+  create_table "profiles", force: :cascade do |t|
+    t.string   "name"
+    t.date     "dob"
+    t.string   "gender"
+    t.string   "medications"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "question"
+    t.integer  "assessment_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "questions", ["assessment_id"], name: "index_questions_on_assessment_id", using: :btree
+
+  create_table "responses", force: :cascade do |t|
+    t.date     "date"
+    t.integer  "response_value"
+    t.integer  "entry_id"
+    t.integer  "question_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "responses", ["entry_id"], name: "index_responses_on_entry_id", using: :btree
+  add_index "responses", ["question_id"], name: "index_responses_on_question_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",           null: false
@@ -36,5 +87,10 @@ ActiveRecord::Schema.define(version: 20160327214720) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["token"], name: "index_users_on_token", unique: true, using: :btree
 
+  add_foreign_key "entries", "profiles"
   add_foreign_key "examples", "users"
+  add_foreign_key "profiles", "users"
+  add_foreign_key "questions", "assessments"
+  add_foreign_key "responses", "entries"
+  add_foreign_key "responses", "questions"
 end
