@@ -5,7 +5,7 @@ class CreateProfiles < ActiveRecord::Migration
       t.date :dob
       t.string :gender
       t.string :medications
-      t.references :user, index: true, foreign_key: true
+      t.references :user, index: true, foreign_key: true, null: false
 
       t.timestamps null: false
     end

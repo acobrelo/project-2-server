@@ -1,4 +1,4 @@
-class ProfilesController < ApplicationController
+class ProfilesController < ProtectedController
   before_action :set_profile, only: [:show, :update, :destroy]
 
   # GET /profiles
@@ -18,7 +18,8 @@ class ProfilesController < ApplicationController
   # POST /profiles
   # POST /profiles.json
   def create
-    @profile = Profile.new(profile_params)
+    #@profile = Profile.new(profile_params)
+    @profile = current_user.build_profile(profile_params)
 
     if @profile.save
       render json: @profile, status: :created, location: @profile
@@ -54,6 +55,6 @@ class ProfilesController < ApplicationController
     end
 
     def profile_params
-      params.require(:profile).permit(:name, :dob, :gender, :medications, :user_id)
+      params.require(:profile).permit(:name, :dob, :gender, :medications)
     end
 end
