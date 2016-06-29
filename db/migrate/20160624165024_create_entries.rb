@@ -4,7 +4,7 @@ class CreateEntries < ActiveRecord::Migration
       t.date :date
       t.boolean :meds_taken
       t.string :comments
-      t.references :profile, index: true, foreign_key: true
+      t.references :profile, index: true, foreign_key: true, unique: true
 
       t.timestamps null: false
     end

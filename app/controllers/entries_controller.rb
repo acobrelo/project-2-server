@@ -1,10 +1,11 @@
-class EntriesController < ApplicationController
+class EntriesController < ProtectedController
   before_action :set_entry, only: [:show, :update, :destroy]
 
   # GET /entries
   # GET /entries.json
   def index
-    @entries = Entry.all
+    @entries = current_user.profile.entries.all
+    #@entries = Entry.all
 
     render json: @entries
   end

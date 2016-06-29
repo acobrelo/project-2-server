@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20160624182351) do
     t.date     "dob"
     t.string   "gender"
     t.string   "medications"
-    t.integer  "user_id"
+    t.integer  "user_id",     null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
